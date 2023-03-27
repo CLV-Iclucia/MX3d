@@ -1,10 +1,12 @@
-#ifndef RENDERCRAFT_MATRIX_H
-#define RENDERCRAFT_MATRIX_H
+#ifndef MX3D_MX3D_MATRIX_H
+#define MX3D_MX3D_MATRIX_H
 #include <stdexcept>
 #include <cmath>
 #include <iostream>
 #include <initializer_list> 
 #include <cstring>
+#include "mx3d_Vector.h"
+
 namespace mx3d
 {
     template<typename T>class Mat3x3;

@@ -4,8 +4,9 @@
 /**
  * \brief Vector class for Rendering
  */
-#ifndef XMATH_MX3D_VECTOR_H
-#define XMATH_MX3D_VECTOR_H
+#ifndef MX3D_MX3D_VECTOR_H
+#define MX3D_MX3D_VECTOR_H
+#include "mx3d_types.h"
 #include <stdexcept>
 #include <cmath>
 #include <iostream>
