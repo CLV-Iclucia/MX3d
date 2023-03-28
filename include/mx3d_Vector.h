@@ -6,17 +6,19 @@
  */
 #ifndef MX3D_MX3D_VECTOR_H
 #define MX3D_MX3D_VECTOR_H
-#include "mx3d_types.h"
+
+#include <mx3d_utils.h>
 #include <stdexcept>
 #include <cmath>
 #include <iostream>
 #include <initializer_list>
+
 namespace mx3d
 {
     /**
      * @tparam T type of the vector
      * @tparam N dimension of the vector.
-     *           Different from the vector class in xmath, this vector usually has 2, 3 or 4 dims.
+     *           This vector usually has 2, 3 or 4 dims.
      *           That suits the need in graphics.
      * @class Vector is specifically designed for graphics and image processing.
      */
@@ -75,7 +77,7 @@ namespace mx3d
             Vector& normalize()
             {
                 Real length = this->norm();
-                if (xmath::EqualZero(length))return *this;
+                if (isZero(length))return *this;
                 else
                 {
                     for (int i = 0; i < N; i++)
@@ -86,7 +88,7 @@ namespace mx3d
             Vector normalized() const
             {
                 Real length = this->norm();
-                if (EqualZero(length))return Vector();
+                if (isZero(length)) return Vector();
                 else return (*this) / length;
             }
             T dot(const Vector& A) const
@@ -127,21 +129,12 @@ namespace mx3d
             }
             Vector operator/(const Vector& A) const
             {
-                for (int i = 0; i < N; i++)
-                {
-                    try
-                    {
-                        if (A.value[i] == 0)throw std::runtime_error("Division by zero!");
-                    }
-                    catch (const std::exception& e)
-                    {
-                        std::cerr << e.what() << '\n';
-                        exit(-1);
-                    }
-                }
                 Vector V;
                 for (int i = 0; i < N; i++)
+                {
+                    assert(!isZero(A.value[i]))
                     V.value[i] = value[i] / A.value[i];
+                }
                 return V;
             }
             Vector operator-(const Vector& A) const
@@ -153,15 +146,7 @@ namespace mx3d
             }
             Vector operator/(const T& v) const
             {
-                try
-                {
-                    if (v == 0)throw std::runtime_error("Division by zero!");
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << e.what() << '\n';
-                    exit(-1);
-                }
+                assert(isZero(v));
                 Vector V;
                 for (int i = 0; i < N; i++)
                     V.value[i] = value[i] / v;
@@ -273,7 +258,7 @@ namespace mx3d
             Vector& normalize()
             {
                 Real length = this->norm();
-                if (xmath::EqualZero(length))return *this;
+                if (isZero(length))return *this;
                 else
                 {
                     x /= length;
@@ -284,7 +269,7 @@ namespace mx3d
             Vector normalized() const
             {
                 Real length = this->norm();
-                if (EqualZero(length))return Vector();
+                if (isZero(length))return Vector();
                 else return (*this) / length;
             }
             T dot(const Vector& A) const { return x * A.x + y * A.y; }
@@ -419,7 +404,12 @@ namespace mx3d
             Vector& normalize()
             {
                 Real length = this->norm();
-                if (xmath::EqualZero(length))return *this;
+                if constexpr(std::is_same<T, int>)
+                    if(length == 0)
+                else
+                {
+                    if (isZero(length))return *this;
+                }
                 else
                 {
                     x /= length;
@@ -431,7 +421,7 @@ namespace mx3d
             Vector normalized() const
             {
                 Real length = this->norm();
-                if (EqualZero(length))return Vector();
+                if (isZero(length))return Vector();
                 else return (*this) / length;
             }
             T dot(const Vector& A) const { return x * A.x + y * A.y + z * A.z; }
@@ -554,4 +544,4 @@ namespace mx3d
     using Vec2u = Vector<uint, 2u>;
     using Vec3u = Vector<uint, 3u>;
 }
-#endif //XMATH_VECTOR_H
+#endif
