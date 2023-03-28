@@ -132,7 +132,7 @@ namespace mx3d
                 Vector V;
                 for (int i = 0; i < N; i++)
                 {
-                    assert(!isZero(A.value[i]))
+                    assert(!isZero(A.value[i]));
                     V.value[i] = value[i] / A.value[i];
                 }
                 return V;
@@ -404,12 +404,7 @@ namespace mx3d
             Vector& normalize()
             {
                 Real length = this->norm();
-                if constexpr(std::is_same<T, int>)
-                    if(length == 0)
-                else
-                {
-                    if (isZero(length))return *this;
-                }
+                if (isZero(length))return *this;
                 else
                 {
                     x /= length;
