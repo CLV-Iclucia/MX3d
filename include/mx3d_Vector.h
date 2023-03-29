@@ -526,6 +526,12 @@ namespace mx3d
                 z *= v;
                 return *this;
             }
+            Vector<T, 2> xy() const { return {x, y}; }
+            Vector<T, 2> yx() const { return {y, x}; }
+            Vector<T, 2> xz() const { return {x, z}; }
+            Vector<T, 2> zx() const { return {z, x}; }
+            Vector<T, 2> yz() const { return {y, z}; }
+            Vector<T, 2> zy() const { return {z, y}; }
             ~Vector() = default;
     };
 
