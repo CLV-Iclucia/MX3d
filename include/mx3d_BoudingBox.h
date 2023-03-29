@@ -4,12 +4,13 @@
 #include "mx3d_Vector.h"
 namespace mx3d
 {
+    template<uint Dim>
     struct BoundingBox
     {
-        Vec3 lower;
-        Vec3 upper;
-        BoundingBox(const Vec3& _lower, const Vec3& _upper) : lower(_lower), upper(_upper) {}
-        Vec3 size() const { return upper - lower; }
+        Vector<Real, Dim> lower;
+        Vector<Real, Dim> upper;
+        BoundingBox(Vector<Real, Dim> _lower, Vector<Real, Dim> _upper) : lower(std::move(_lower)), upper(std::move(_upper)) {}
+        Vector<Real, Dim> size() const { return upper - lower; }
     };
 }
 
