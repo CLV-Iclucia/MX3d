@@ -22,19 +22,20 @@ namespace mx3d
      *           That suits the need in graphics.
      * @class Vector is specifically designed for graphics and image processing.
      */
-    template<typename T, unsigned N>class Vector;
+    template<typename T, unsigned N> class Vector;
     template<typename T, unsigned N>
-    Vector<T, N> operator*(const T& v, const Vector<T, N>& A);
+    Vector<T, N> operator*(T v, const Vector<T, N>& A);
     template<typename T, unsigned N>
-    Vector<T, N> operator/(const T& v, const Vector<T, N>& A);
+    Vector<T, N> operator/(T v, const Vector<T, N>& A);
 
     template<typename T, unsigned N>
     class Vector
     {
+        static_assert(std::is_arithmetic_v<T>, "ERROR: in instantiation of Vector: the type must be arithmetic type.")
         public:
             friend Vector operator*<T, N>(const T&, const Vector&);
             friend Vector operator/<T, N>(const T&, const Vector&);
-            Vector(){for (int i = 0; i < N; i++)value[i] = 0;}
+            Vector() {for (int i = 0; i < N; i++)value[i] = 0;}
             Vector(std::initializer_list<T> lst)
             {
                 auto it = lst.begin();
@@ -144,7 +145,8 @@ namespace mx3d
                     V.value[i] = value[i] - A.value[i];
                 return V;
             }
-            Vector operator/(const T& v) const
+            template<typename Any>
+            Vector operator/(Any v) const
             {
                 assert(isZero(v));
                 Vector V;
@@ -152,7 +154,8 @@ namespace mx3d
                     V.value[i] = value[i] / v;
                 return V;
             }
-            Vector operator*(const T& v) const
+            template<typename Any>
+            Vector operator*(Any v) const
             {
                 Vector V;
                 for (int i = 0; i < N; i++)
@@ -188,7 +191,8 @@ namespace mx3d
                 }
                 return *this;
             }
-            Vector& operator/=(const T& v)
+            template<typename Any>
+            Vector& operator/=(Any v)
             {
                 try
                 {
@@ -209,7 +213,8 @@ namespace mx3d
                     value[i] -= A.value[i];
                 return *this;
             }
-            Vector& operator*=(const T& v)
+            template<typename Any>
+            Vector& operator*=(Any v)
             {
                 for (int i = 0; i < N; i++)
                     value[i] *= v;
@@ -220,12 +225,12 @@ namespace mx3d
             T value[N];
     };
     template<typename T, unsigned N>
-    Vector<T, N> operator*(const T& v, const Vector<T, N>& A)
+    Vector<T, N> operator*(T v, const Vector<T, N>& A)
     {
         return A * v;
     }
     template<typename T, unsigned N>
-    Vector<T, N> operator/(const T& v, const Vector<T, N>& A)
+    Vector<T, N> operator/(T v, const Vector<T, N>& A)
     {
         return Vector<T, N>(v) / A;
     }
@@ -233,6 +238,7 @@ namespace mx3d
     template<typename T>
     class Vector<T, 2u>
     {
+            static_assert(std::is_arithmetic_v<T>, "ERROR: must be arithmetic type.");
         public:
             T x = static_cast<T>(0), y = static_cast<T>(0);
             friend Vector operator*<T>(const T&, const Vector&);
@@ -278,7 +284,7 @@ namespace mx3d
                 if(i == 0) return x;
                 else if(i == 1) return y;
             }
-            const T& operator[](int i) const
+            T operator[](int i) const
             {
                 if(i == 0) return x;
                 else if(i == 1) return y;
@@ -300,11 +306,12 @@ namespace mx3d
                 }
             }
             Vector operator-(const Vector& A) const { return {x - A.x, y - A.y}; }
-            Vector operator/(const T& v) const
+            template<typename Any>
+            Vector operator/(Any v) const
             {
                 try
                 {
-                    if (v == 0)throw std::runtime_error("Division by zero!");
+                    if (isZero(v))throw std::runtime_error("Division by zero!");
                     return {v.x, v.y};
                 }
                 catch (const std::exception& e)
@@ -313,7 +320,12 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            Vector operator*(const T& v) const { return {v.x * v, v.y * v}; }
+            template<typename Any>
+            Vector operator*(Any v) const
+            {
+                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
+                return {v.x * v, v.y * v};
+            }
             Vector& operator*=(const Vector& A)
             {
                 x *= A.x;
@@ -330,7 +342,7 @@ namespace mx3d
             {
                 try
                 {
-                    if (A.x == 0 || A.y == 0)throw std::runtime_error("Division by zero!");
+                    if (isZero(A.x) || isZero(A.y))throw std::runtime_error("Division by zero!");
                     else
                     {
                         x /= A.x;
@@ -344,11 +356,12 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            Vector& operator/=(const T& v)
+            template<typename Any>
+            Vector& operator/=(Any v)
             {
                 try
                 {
-                    if (v == 0)throw std::runtime_error("Division by zero!");
+                    if (isZero(v))throw std::runtime_error("Division by zero!");
                 }
                 catch (const std::exception& e)
                 {
@@ -365,7 +378,8 @@ namespace mx3d
                 y -= A.y;
                 return *this;
             }
-            Vector& operator*=(const T& v)
+            template<typename Any>
+            Vector& operator*=(Any v)
             {
                 x *= v;
                 y *= v;
@@ -377,6 +391,7 @@ namespace mx3d
     template<typename T>
     class Vector<T, 3u>
     {
+            static_assert(std::is_arithmetic_v<T>, "ERROR: elements of Vector must be arithmetic type.")
         public:
             T x = static_cast<T>(0), y = static_cast<T>(0), z = static_cast<T>(0);
             friend Vector operator*<T>(const T&, const Vector&);
@@ -398,8 +413,8 @@ namespace mx3d
                 z = V.z;
                 return *this;
             }
-            Vector(const Vector& V) : x(V.x), y(V.y) {}
-            explicit Vector(T v) : x(v), y(v) {}
+            Vector(const Vector& V) : x(V.x), y(V.y), z(V.z) {}
+            explicit Vector(T v) : x(v), y(v), z(v) {}
             Real norm() const { return std::sqrt(x * x + y * y + z * z); }
             Vector& normalize()
             {
@@ -426,7 +441,7 @@ namespace mx3d
                 else if(i == 1) return y;
                 else if(i == 2) return z;
             }
-            const T& operator[](int i) const
+            T operator[](int i) const
             {
                 if(i == 0) return x;
                 else if(i == 1) return y;
@@ -439,7 +454,7 @@ namespace mx3d
             {
                 try
                 {
-                    if (A.x == 0 || A.y == 0 || A.z == 0)throw std::runtime_error("Division by zero!");
+                    if (isZero(A.x) || isZero(A.y) || isZero(A.z) )throw std::runtime_error("Division by zero!");
                     return {x / A.x, y / A.y, z / A.z};
                 }
                 catch (const std::exception& e)
@@ -449,11 +464,12 @@ namespace mx3d
                 }
             }
             Vector operator-(const Vector& A) const { return {x - A.x, y - A.y, z - A.z}; }
-            Vector operator/(const T& v) const
+            template<typename Any>
+            Vector operator/(Any v) const
             {
                 try
                 {
-                    if (v == 0)throw std::runtime_error("Division by zero!");
+                    if (isZero(v))throw std::runtime_error("Division by zero!");
                     return {v.x, v.y, v.z};
                 }
                 catch (const std::exception& e)
@@ -462,7 +478,8 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            Vector operator*(const T& v) const { return {v.x * v, v.y * v, v.z * v}; }
+            template<typename Any>
+            Vector operator*(Any v) const { return {v.x * v, v.y * v, v.z * v}; }
             Vector& operator*=(const Vector& A)
             {
                 x *= A.x;
@@ -496,11 +513,13 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            Vector& operator/=(const T& v)
+            template<typename Any>
+            Vector& operator/=(Any v)
             {
+                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 try
                 {
-                    if (v == 0)throw std::runtime_error("Division by zero!");
+                    if (isZero(v))throw std::runtime_error("Division by zero!");
                 }
                 catch (const std::exception& e)
                 {
@@ -519,8 +538,10 @@ namespace mx3d
                 z -= A.z;
                 return *this;
             }
-            Vector& operator*=(const T& v)
+            template<typename Any>
+            Vector& operator*=(Any v)
             {
+                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 x *= v;
                 y *= v;
                 z *= v;

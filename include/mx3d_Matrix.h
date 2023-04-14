@@ -9,15 +9,24 @@
 
 namespace mx3d
 {
-    template<typename T>class Mat3x3;
+    template<typename T> class Mat3x3;
     template<typename T>
-    Mat3x3<T> operator*(const T& v, const Mat3x3<T>& A);
+    Mat3x3<T> operator*(T v, const Mat3x3<T>& A);
+    // TODO: implement matrices of more shapes
     template<typename T>
     class Mat3x3
     {
-            friend Mat3x3 operator*<T>(const T&, const Mat3x3&);
+            static_assert(std::is_arithmetic_v<T>, "ERROR: in instantiation of Vector: the type must be arithmetic type.");
+            template<typename Any>
+            friend Mat3x3 operator*<Any>(Any, const Mat3x3&);
         public:
-            Mat3x3() { value[0] = value[4] = value[8] = static_cast<T>(0); }
+            static Mat3x3 Identity()
+            {
+                Mat3x3 ret;
+                ret.value[0] = ret.value[4] = ret.value[8] = static_cast<T>(1);
+                return ret;
+            }
+            Mat3x3() { for(uint i = 0; i < 9; i++) value[i] = 0; }
             Mat3x3(std::initializer_list<T> lst)
             {
                 auto it = lst.begin();
@@ -37,8 +46,8 @@ namespace mx3d
                 value[7] = C[1];
                 value[8] = C[2];
             }
-            T& operator()(int i, int j) { return value[i][j]; }
-            const T& operator()(int i, int j) const { return value[i][j]; }
+            T& operator()(int i, int j) { return value[3 * i + j]; }
+            const T& operator()(int i, int j) const { return value[3 * i + j]; }
             T& operator[](int i) { return value + 3 * i; }
             const T& operator[](int i) const { return value + 3 * i; }
             Vec3 operator*(const Vec3& A) const
@@ -103,11 +112,12 @@ namespace mx3d
                     M.value[i] = -value[i];
                 return M;
             }
-            Mat3x3 operator/(const T& v) const
+            template<typename Any>
+            Mat3x3 operator/(Any v) const
             {
                 try
                 {
-                    if (v == 0)throw std::runtime_error("Division by zero!");
+                    if (isZero(v))throw std::runtime_error("Division by zero!");
                 }
                 catch (const std::exception& e)
                 {
@@ -119,8 +129,10 @@ namespace mx3d
                     M.value[i] = value[i] / v;
                 return M;
             }
-            Mat3x3 operator*(const T& v) const
+            template<typename Any>
+            Mat3x3 operator*(Any v) const
             {
+                static_assert(std::is_arithmetic_v<Any>);
                 Mat3x3 M;
                 for (int i = 0; i < 9; i++)
                     M.value[i] = v * value[i];
@@ -144,7 +156,7 @@ namespace mx3d
                 {
                     try
                     {
-                        if (A.value[i] == 0)throw std::runtime_error("Division by zero!");
+                        if (isZero(A.value[i]) == 0)throw std::runtime_error("Division by zero!");
                         else value[i] /= A.value[i];
                     }
                     catch (const std::exception& e)
@@ -155,8 +167,10 @@ namespace mx3d
                 }
                 return *this;
             }
-            Mat3x3& operator/=(const T& v)
+            template<typename Any>
+            Mat3x3& operator/=(Any v)
             {
+                static_assert(std::is_arithmetic_v<Any>, "ERROR: divider must be arithmetic type");
                 try
                 {
                     if (v == 0)throw std::runtime_error("Division by zero!");
@@ -184,18 +198,40 @@ namespace mx3d
                     value[i] -= A.value[i];
                 return *this;
             }
-            Mat3x3& operator*=(const T& v)
+            template<typename Any>
+            Mat3x3& operator*=(Any v)
             {
+                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 for (int i = 0; i < 9; i++)
                     value[i] *= v;
                 return *this;
             }
             ~Mat3x3() = default;
+            Real det() const
+            {
+                return value[0] * value[4] * value[8] + value[3] * value[7] * value[2] + value[1] * value[5] * value[7]
+                        - value[2] * value[4] * value[6] - value[0] * value[5] * value[7] - value[1] * value[3] * value[8];
+            }
+            Mat3x3<Real> inv() const
+            {
+                Mat3x3 mat;
+                Real detv = det();
+                mat.value[0] = (value[4] * value[8] - value[7] * value[5]) / detv;
+                mat.value[1] = (value[6] * value[5] - value[3] * value[8]) / detv;
+                mat.value[2] = (value[3] * value[7] - value[4] * value[6]) / detv;
+                mat.value[3] = (value[2] * value[7] - value[1] * value[8]) / detv;
+                mat.value[4] = (value[0] * value[8] - value[2] * value[6]) / detv;
+                mat.value[5] = (value[1] * value[6] - value[0] * value[7]) / detv;
+                mat.value[6] = (value[1] * value[5] - value[2] * value[4]) / detv;
+                mat.value[7] = (value[3] * value[4] - value[0] * value[5]) / detv;
+                mat.value[8] = (value[0] * value[4] - value[1] * value[3]) / detv;
+                return mat;
+            }
         private:
             T value[9];//Column-Major Order
     };
-    template<typename T>
-    Mat3x3<T> operator*(const T& v, const Mat3x3<T>& A) { return A * v; }
+    template<typename Any, typename T>
+    Mat3x3<T> operator*(Any v, const Mat3x3<T>& A) { return A * v; }
     using Mat3 = Mat3x3<Real>;
 }
 #endif
