@@ -308,7 +308,7 @@ namespace mx3d
                 try
                 {
                     if (isZero(v))throw std::runtime_error("Division by zero!");
-                    return {v.x, v.y};
+                    return {v * x, v * y};
                 }
                 catch (const std::exception& e)
                 {
@@ -318,7 +318,7 @@ namespace mx3d
             }
             Vector operator*(T v) const
             {
-                return {v.x * v, v.y * v};
+                return {x * v, y * v};
             }
             Vector& operator*=(const Vector& A)
             {
@@ -361,8 +361,8 @@ namespace mx3d
                     std::cerr << e.what() << '\n';
                     exit(-1);
                 }
-                v.x /= v;
-                v.y /= v;
+                x /= v;
+                y /= v;
                 return *this;
             }
             Vector& operator-=(const Vector& A)
@@ -462,7 +462,7 @@ namespace mx3d
                 try
                 {
                     if (isZero(v))throw std::runtime_error("Division by zero!");
-                    return {v.x, v.y, v.z};
+                    return {v * x, v * y, v * z};
                 }
                 catch (const std::exception& e)
                 {
@@ -470,7 +470,7 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            Vector operator*(T v) const { return {v.x * v, v.y * v, v.z * v}; }
+            Vector operator*(T v) const { return {x * v, y * v, z * v}; }
             Vector& operator*=(const Vector& A)
             {
                 x *= A.x;
@@ -515,9 +515,9 @@ namespace mx3d
                     std::cerr << e.what() << '\n';
                     exit(-1);
                 }
-                v.x /= v;
-                v.y /= v;
-                v.z /= v;
+                x /= v;
+                y /= v;
+                z /= v;
                 return *this;
             }
             Vector& operator-=(const Vector& A)
