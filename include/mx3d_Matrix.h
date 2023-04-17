@@ -46,9 +46,9 @@ namespace mx3d
                 value[8] = C.z;
             }
             T& operator()(int i, int j) { return value[3 * i + j]; }
-            const T& operator()(int i, int j) const { return value[3 * i + j]; }
+            T operator()(int i, int j) const { return value[3 * i + j]; }
             T& operator[](int i) { return value + 3 * i; }
-            const T& operator[](int i) const { return value + 3 * i; }
+            T operator[](int i) const { return value + 3 * i; }
             Vector<T, 3> operator*(const Vector<T, 3>& A) const
             {
                 Vector<T, 3> V;

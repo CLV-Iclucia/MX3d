@@ -33,8 +33,8 @@ namespace mx3d
     {
         static_assert(std::is_arithmetic_v<T>, "ERROR: in instantiation of Vector: the type must be arithmetic type.");
         public:
-            friend Vector operator*<T, N>(const T&, const Vector&);
-            friend Vector operator/<T, N>(const T&, const Vector&);
+            friend Vector operator*<T, N>(T, const Vector&);
+            friend Vector operator/<T, N>(T, const Vector&);
             Vector() {for (int i = 0; i < N; i++)value[i] = 0;}
             Vector(std::initializer_list<T> lst)
             {
@@ -103,7 +103,7 @@ namespace mx3d
             {
                 return value[i];
             }
-            const T& operator[](int i) const
+            T operator[](int i) const
             {
                 return value[i];
             }
@@ -237,8 +237,8 @@ namespace mx3d
             static_assert(std::is_arithmetic_v<T>, "ERROR: must be arithmetic type.");
         public:
             T x = static_cast<T>(0), y = static_cast<T>(0);
-            friend Vector operator*<T>(const T&, const Vector&);
-            friend Vector operator/<T>(const T&, const Vector&);
+            friend Vector operator*<T>(T, const Vector&);
+            friend Vector operator/<T>(T, const Vector&);
             Vector() = default;
             Vector(T _x, T _y) : x(_x), y(_y) {}
             Vector(Vector&& V) noexcept : x(std::move(V.x)), y(std::move(V.y)) {}
@@ -386,8 +386,8 @@ namespace mx3d
             static_assert(std::is_arithmetic_v<T>, "ERROR: elements of Vector must be arithmetic type.");
         public:
             T x = static_cast<T>(0), y = static_cast<T>(0), z = static_cast<T>(0);
-            friend Vector operator*<T>(const T&, const Vector&);
-            friend Vector operator/<T>(const T&, const Vector&);
+            friend Vector operator*<T>(T, const Vector&);
+            friend Vector operator/<T>(T, const Vector&);
             Vector() = default;
             Vector(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
             Vector(Vector&& V) noexcept : x(std::move(V.x)), y(std::move(V.y)), z(std::move(V.z)) {}
