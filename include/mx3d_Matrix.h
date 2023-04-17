@@ -33,25 +33,25 @@ namespace mx3d
                     value[i] = *it;
             }
             Mat3x3(const Mat3x3& M) = default;
-            Mat3x3(const Vec3& A, const Vec3& B, const Vec3& C)
+            Mat3x3(const Vector<T, 3>& A, const Vectot<T, 3>& B, const Vector<T, 3>& C)
             {
                 value[0] = A[0];
-                value[1] = A[1];
-                value[2] = A[2];
-                value[3] = B[0];
-                value[4] = B[1];
-                value[5] = B[2];
-                value[6] = C[0];
-                value[7] = C[1];
-                value[8] = C[2];
+                value[1] = A.y;
+                value[2] = A.z;
+                value[3] = B.x;
+                value[4] = B.y;
+                value[5] = B.z;
+                value[6] = C.x;
+                value[7] = C.y;
+                value[8] = C.z;
             }
             T& operator()(int i, int j) { return value[3 * i + j]; }
             const T& operator()(int i, int j) const { return value[3 * i + j]; }
             T& operator[](int i) { return value + 3 * i; }
             const T& operator[](int i) const { return value + 3 * i; }
-            Vec3 operator*(const Vec3& A) const
+            Vector<T, 3> operator*(const Vector<T, 3>& A) const
             {
-                Vec3 V;
+                Vector<T, 3> V;
                 V[0] = value[0] * A[0] + value[3] * A[1] + value[6] * A[2];
                 V[1] = value[1] * A[0] + value[4] * A[1] + value[7] * A[2];
                 V[2] = value[2] * A[0] + value[5] * A[1] + value[8] * A[2];

@@ -239,6 +239,7 @@ namespace mx3d
             T x = static_cast<T>(0), y = static_cast<T>(0);
             friend Vector operator*<T>(const T&, const Vector&);
             friend Vector operator/<T>(const T&, const Vector&);
+            Vector() = default;
             Vector(T _x, T _y) : x(_x), y(_y) {}
             Vector(Vector&& V) noexcept : x(std::move(V.x)), y(std::move(V.y)) {}
             Vector& operator=(Vector&& V) noexcept
@@ -387,13 +388,14 @@ namespace mx3d
             T x = static_cast<T>(0), y = static_cast<T>(0), z = static_cast<T>(0);
             friend Vector operator*<T>(const T&, const Vector&);
             friend Vector operator/<T>(const T&, const Vector&);
+            Vector() = default;
             Vector(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
             Vector(Vector&& V) noexcept : x(std::move(V.x)), y(std::move(V.y)), z(std::move(V.z)) {}
             Vector& operator=(Vector&& V) noexcept
             {
-                x = std::move(V.x);
-                y = std::move(V.y);
-                z = std::move(V.z);
+                x = V.x;
+                y = V.y;
+                z = V.z;
                 return *this;
             }
             Vector& operator=(const Vector& V)
@@ -409,7 +411,7 @@ namespace mx3d
             Real norm() const { return std::sqrt(x * x + y * y + z * z); }
             Vector& normalize()
             {
-                Real length = this->norm();
+                Real length = norm();
                 if (isZero(length))return *this;
                 else
                 {
@@ -421,7 +423,7 @@ namespace mx3d
             }
             Vector normalized() const
             {
-                Real length = this->norm();
+                Real length = norm();
                 if (isZero(length))return Vector();
                 else return (*this) / length;
             }
