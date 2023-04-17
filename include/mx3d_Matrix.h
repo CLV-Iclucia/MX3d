@@ -33,9 +33,9 @@ namespace mx3d
                     value[i] = *it;
             }
             Mat3x3(const Mat3x3& M) = default;
-            Mat3x3(const Vector<T, 3>& A, const Vectot<T, 3>& B, const Vector<T, 3>& C)
+            Mat3x3(const Vector<T, 3>& A, const Vector<T, 3>& B, const Vector<T, 3>& C)
             {
-                value[0] = A[0];
+                value[0] = A.x;
                 value[1] = A.y;
                 value[2] = A.z;
                 value[3] = B.x;
