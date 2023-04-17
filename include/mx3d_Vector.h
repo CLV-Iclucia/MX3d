@@ -317,7 +317,6 @@ namespace mx3d
             }
             Vector operator*(T v) const
             {
-                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 return {v.x * v, v.y * v};
             }
             Vector& operator*=(const Vector& A)
@@ -505,7 +504,6 @@ namespace mx3d
             }
             Vector& operator/=(T v)
             {
-                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 try
                 {
                     if (isZero(v))throw std::runtime_error("Division by zero!");
@@ -529,7 +527,6 @@ namespace mx3d
             }
             Vector& operator*=(T v)
             {
-                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 x *= v;
                 y *= v;
                 z *= v;

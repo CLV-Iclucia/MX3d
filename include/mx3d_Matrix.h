@@ -17,8 +17,7 @@ namespace mx3d
     class Mat3x3
     {
             static_assert(std::is_arithmetic_v<T>, "ERROR: in instantiation of Vector: the type must be arithmetic type.");
-            template<typename Any>
-            friend Mat3x3 operator*<Any>(Any, const Mat3x3&);
+            friend Mat3x3 operator*(T, const Mat3x3&);
         public:
             static Mat3x3 Identity()
             {
@@ -130,7 +129,6 @@ namespace mx3d
             }
             Mat3x3 operator*(T v) const
             {
-                static_assert(std::is_arithmetic_v<Any>);
                 Mat3x3 M;
                 for (int i = 0; i < 9; i++)
                     M.value[i] = v * value[i];
@@ -167,7 +165,6 @@ namespace mx3d
             }
             Mat3x3& operator/=(T v)
             {
-                static_assert(std::is_arithmetic_v<Any>, "ERROR: divider must be arithmetic type");
                 try
                 {
                     if (v == 0)throw std::runtime_error("Division by zero!");
@@ -197,7 +194,6 @@ namespace mx3d
             }
             Mat3x3& operator*=(T v)
             {
-                static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 for (int i = 0; i < 9; i++)
                     value[i] *= v;
                 return *this;
