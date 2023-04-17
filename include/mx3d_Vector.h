@@ -382,7 +382,7 @@ namespace mx3d
     template<typename T>
     class Vector<T, 3u>
     {
-            static_assert(std::is_arithmetic_v<T>, "ERROR: elements of Vector must be arithmetic type.")
+            static_assert(std::is_arithmetic_v<T>, "ERROR: elements of Vector must be arithmetic type.");
         public:
             T x = static_cast<T>(0), y = static_cast<T>(0), z = static_cast<T>(0);
             friend Vector operator*<T>(const T&, const Vector&);
