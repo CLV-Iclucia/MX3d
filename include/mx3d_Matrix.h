@@ -112,8 +112,7 @@ namespace mx3d
                     M.value[i] = -value[i];
                 return M;
             }
-            template<typename Any>
-            Mat3x3 operator/(Any v) const
+            Mat3x3 operator/(T v) const
             {
                 try
                 {
@@ -129,8 +128,7 @@ namespace mx3d
                     M.value[i] = value[i] / v;
                 return M;
             }
-            template<typename Any>
-            Mat3x3 operator*(Any v) const
+            Mat3x3 operator*(T v) const
             {
                 static_assert(std::is_arithmetic_v<Any>);
                 Mat3x3 M;
@@ -167,8 +165,7 @@ namespace mx3d
                 }
                 return *this;
             }
-            template<typename Any>
-            Mat3x3& operator/=(Any v)
+            Mat3x3& operator/=(T v)
             {
                 static_assert(std::is_arithmetic_v<Any>, "ERROR: divider must be arithmetic type");
                 try
@@ -198,8 +195,7 @@ namespace mx3d
                     value[i] -= A.value[i];
                 return *this;
             }
-            template<typename Any>
-            Mat3x3& operator*=(Any v)
+            Mat3x3& operator*=(T v)
             {
                 static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 for (int i = 0; i < 9; i++)
@@ -230,8 +226,8 @@ namespace mx3d
         private:
             T value[9];//Column-Major Order
     };
-    template<typename Any, typename T>
-    Mat3x3<T> operator*(Any v, const Mat3x3<T>& A) { return A * v; }
+    template<typename T>
+    Mat3x3<T> operator*(T v, const Mat3x3<T>& A) { return A * v; }
     using Mat3 = Mat3x3<Real>;
 }
 #endif

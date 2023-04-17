@@ -145,8 +145,7 @@ namespace mx3d
                     V.value[i] = value[i] - A.value[i];
                 return V;
             }
-            template<typename Any>
-            Vector operator/(Any v) const
+            Vector operator/(T v) const
             {
                 assert(isZero(v));
                 Vector V;
@@ -154,8 +153,7 @@ namespace mx3d
                     V.value[i] = value[i] / v;
                 return V;
             }
-            template<typename Any>
-            Vector operator*(Any v) const
+            Vector operator*(T v) const
             {
                 Vector V;
                 for (int i = 0; i < N; i++)
@@ -191,8 +189,7 @@ namespace mx3d
                 }
                 return *this;
             }
-            template<typename Any>
-            Vector& operator/=(Any v)
+            Vector& operator/=(T v)
             {
                 try
                 {
@@ -213,8 +210,7 @@ namespace mx3d
                     value[i] -= A.value[i];
                 return *this;
             }
-            template<typename Any>
-            Vector& operator*=(Any v)
+            Vector& operator*=(T v)
             {
                 for (int i = 0; i < N; i++)
                     value[i] *= v;
@@ -306,8 +302,7 @@ namespace mx3d
                 }
             }
             Vector operator-(const Vector& A) const { return {x - A.x, y - A.y}; }
-            template<typename Any>
-            Vector operator/(Any v) const
+            Vector operator/(T v) const
             {
                 try
                 {
@@ -320,8 +315,7 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            template<typename Any>
-            Vector operator*(Any v) const
+            Vector operator*(T v) const
             {
                 static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 return {v.x * v, v.y * v};
@@ -356,8 +350,7 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            template<typename Any>
-            Vector& operator/=(Any v)
+            Vector& operator/=(T v)
             {
                 try
                 {
@@ -378,8 +371,7 @@ namespace mx3d
                 y -= A.y;
                 return *this;
             }
-            template<typename Any>
-            Vector& operator*=(Any v)
+            Vector& operator*=(T v)
             {
                 x *= v;
                 y *= v;
@@ -464,8 +456,7 @@ namespace mx3d
                 }
             }
             Vector operator-(const Vector& A) const { return {x - A.x, y - A.y, z - A.z}; }
-            template<typename Any>
-            Vector operator/(Any v) const
+            Vector operator/(T v) const
             {
                 try
                 {
@@ -478,8 +469,7 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            template<typename Any>
-            Vector operator*(Any v) const { return {v.x * v, v.y * v, v.z * v}; }
+            Vector operator*(T v) const { return {v.x * v, v.y * v, v.z * v}; }
             Vector& operator*=(const Vector& A)
             {
                 x *= A.x;
@@ -513,8 +503,7 @@ namespace mx3d
                     exit(-1);
                 }
             }
-            template<typename Any>
-            Vector& operator/=(Any v)
+            Vector& operator/=(T v)
             {
                 static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 try
@@ -538,8 +527,7 @@ namespace mx3d
                 z -= A.z;
                 return *this;
             }
-            template<typename Any>
-            Vector& operator*=(Any v)
+            Vector& operator*=(T v)
             {
                 static_assert(std::is_arithmetic_v<Any>, "ERROR: must be arithmetic type.");
                 x *= v;
