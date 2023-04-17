@@ -31,7 +31,7 @@ namespace mx3d
     template<typename T, unsigned N>
     class Vector
     {
-        static_assert(std::is_arithmetic_v<T>, "ERROR: in instantiation of Vector: the type must be arithmetic type.")
+        static_assert(std::is_arithmetic_v<T>, "ERROR: in instantiation of Vector: the type must be arithmetic type.");
         public:
             friend Vector operator*<T, N>(const T&, const Vector&);
             friend Vector operator/<T, N>(const T&, const Vector&);
