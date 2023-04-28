@@ -11,14 +11,15 @@ namespace mx3d
     template<typename T>
     inline bool isZero(T x)
     {
-        if constexpr (is_same_v<T, float> || is_same_v<T, Real>)
+        if constexpr (std::is_same_v<T, float> || std::is_same_v<T, Real>)
             return x <= EPS && x >= -EPS;;
         else return x == 0;
     }
+
     template<typename T>
     inline bool isEqual(T x, T y)
     {
-        if constexpr (is_same_v<T, float> || is_same_v<T, Real>)
+        if constexpr (std::is_same_v<T, float> || std::is_same_v<T, Real>)
         return x - y <= EPS && x - y >= -EPS;;
         else return x == y;
     }
